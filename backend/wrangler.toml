@@ -2,7 +2,7 @@ name = "backend"
 compatibility_date = "2023-12-01"
 
 # [vars]
-# DATABASE_URL = "postgresql://akhilesh423:VxqYgdl0JNC8@ep-fancy-forest-a55eshwm.us-east-2.aws.neon.tech/neondb?sslmode=require"
+# DATABASE_URL = "DATABASE_URL="prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiNDJjOTc5MGYtYzJkZi00NmM0LWE5YTktMDFkNDdkNGJjYWFjIiwidGVuYW50X2lkIjoiNjUxYTRhOWRhNzU3ZjljYzQ0MmRhY2IyYTNhNWVkYzY2NDM0MTdkNjEzZTBhMDI5N2Y3ZGRiYmMxMDA3NDk0OCIsImludGVybmFsX3NlY3JldCI6IjA5NWI3MTliLTY4MjUtNGQ0Mi1iMDJhLTEyNTNkYjM5YzljMyJ9.O5AXDT_f-_tBu4eq7McEu2uV1G8Lpk9J_s3xT8j5DjU"
 
 # [[kv_namespaces]]
 # binding = "MY_KV_NAMESPACE"
