@@ -2,9 +2,13 @@ import { Hono } from 'hono';
 import { signupValidation, signinValidation } from '@akhilesh423/medium-clone';
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate'
+import { sign } from 'hono/jwt'
+
+
 
 type Bindings = {
-    DATABASE_URL: string
+    DATABASE_URL: string,
+    JWT_SECRET: string
 }
 
 const auth = new Hono<{ Bindings: Bindings }>();
@@ -39,7 +43,12 @@ auth.post('/signup', async (c) => {
                 name: userBody.name,
             },
         });
-        return c.json({ data: 'User created successfully', user: createUser }, 201);
+        const payload = {
+            sub: userBody.username,
+            exp: Math.floor(Date.now() / 1000) + 60 * 30,
+        }
+        const secretToken = await sign(payload, c.env.JWT_SECRET)
+        return c.json({ data: 'User created successfully', token: secretToken }, 201);
     } catch (error) {
         console.error(error);
         return c.json({ data: 'Internal server error' }, 500);
@@ -53,7 +62,7 @@ auth.post('/signin', async (c) => {
     try {
         const userBody = await c.req.json();
         const userValidation = signinValidation.safeParse(userBody)
-        if (!userBody.username || userBody.password) {
+        if (!userBody.username || !userBody.password) {
             return c.json({ msg: "Username or password is missing!" }, 400)
         }
         if (!userValidation.success) {
@@ -67,10 +76,20 @@ auth.post('/signin', async (c) => {
         if (!usernameExists) {
             return c.text('User not found, please signup!', 409);
         }
-        if (usernameExists) {
-            return c.text("user found")
+        const payload = {
+            sub: userBody.username,
+            exp: Math.floor(Date.now() / 1000) + 60 * 30,
         }
+        const secretToken = await sign(payload, c.env.JWT_SECRET)
+        if (usernameExists) {
+            if (userBody.password === usernameExists.password) {
+                return c.json({ token: secretToken, msg: "user successfully logged in !" }, 200)
 
+            }
+            else {
+                return c.json({ msg: "incorrect password" }, 401)
+            }
+        }
     }
     catch (e) {
         console.log(e)
