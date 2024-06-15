@@ -1,9 +1,10 @@
-import SignUp from "./pages/SignUp"
+import AuthRoutes from "./routes/AuthRoutes"
+import { BrowserRouter as Router } from "react-router-dom"
 
 export default function App() {
   return (
-    <>
-      <SignUp />
-    </>
+    <Router>
+      <AuthRoutes />
+    </Router>
   )
 }
